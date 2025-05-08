@@ -1,175 +1,205 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Player Spotify Style</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-      body {
-        margin: 0;
-        background: transparent;
-      }
+        /* Reset absoluto para embed */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 42%;
+            background: transparent;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
 
-      .audio-player {
-        width: 100%;
-        max-width: 400px;
-        padding: 20px;
-        background: #181818;
-        border-radius: 12px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-      }
+        .audio-player {
+            width: 100%;
+            height: 152px;
+            background: #181818;
+            padding: 16px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border-radius: 12px;
+        }
 
-      .audio-player {
-        width: 100%;
-        max-width: 400px;
-        padding: 20px;
-        background: #181818;
-        border-radius: 12px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-      }
+        .player-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-      .progress-container {
-        margin: 15px 0;
-      }
+        .cover-art {
+            width: 56px;
+            height: 56px;
+            border-radius: 4px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
 
-      .seek-bar {
-        width: 100%;
-        height: 4px;
-        background: #535353;
-        border-radius: 2px;
-        cursor: pointer;
-      }
+        .cover-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-      .seek-bar::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        width: 12px;
-        height: 12px;
-        background: #fff;
-        border-radius: 50%;
-      }
+        .track-info {
+            flex: 1;
+            min-width: 0;
+        }
 
-      .time-display {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.8em;
-        color: #b3b3b3;
-        margin-top: 5px;
-      }
+        .track-title {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-      .player-controls {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 20px;
-      }
+        .track-artist {
+            color: #b3b3b3;
+            font-size: 12px;
+            margin-top: 2px;
+        }
 
-      .play-btn {
-        background: #fff;
-        border: none;
-        border-radius: 50%;
-        width: 45px;
-        height: 45px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: transform 0.9s ease;
-      }
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: #535353;
+            border-radius: 2px;
+            cursor: pointer;
+        }
 
-      .play-btn:hover {
-        transform: scale(1.1);
-      }
+        .seek-bar {
+            width: 100%;
+            height: 4px;
+            -webkit-appearance: none;
+            background: transparent;
+        }
 
-      .lucide {
-        width: 20px;
-        height: 20px;
-      }
+        .seek-bar::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .seek-bar:hover::-webkit-slider-thumb {
+            opacity: 1;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            color: #b3b3b3;
+            font-size: 10px;
+            margin-top: 4px;
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .play-btn {
+            background: #1db954;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .lucide {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="audio-player">
-      <!-- Barra de progresso -->
-      <div class="progress-container">
-        <input type="range" class="seek-bar" id="seekBar" value="0" />
-        <div class="time-display">
-          <span id="currentTime">0:00</span>
-          <span id="duration">0:00</span>
+        <div class="player-header">
+            <div class="cover-art">
+                <img src="https://image-cdn-ak.spotifycdn.com/image/ab67656300005f1f0fc4389b9b14d9255043f537" alt="Capa">
+            </div>
+            <div class="track-info">
+                <div class="track-title">Comece aqui</div>
+                <div class="track-artist">Vitis Souls</div>
+            </div>
         </div>
-      </div>
 
-      <!-- Controles -->
-      <div class="player-controls">
-        <button class="play-btn" id="playPauseBtn">
-          <i data-lucide="play"></i>
-        </button>
-      </div>
+        <div class="progress-container">
+            <input type="range" class="seek-bar" id="seekBar" value="0">
+            <div class="time-display">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+        </div>
 
-      <!-- Elemento de áudio -->
-      <audio
-        id="audioElement"
-        src="ElevenLabs_Inteligência_Emocional_Navegando_Nossas_Emoções_com_Consciência.mp3"
-      ></audio>
+        <div class="player-controls">
+            <button class="play-btn" id="playPauseBtn">
+                <i data-lucide="play"></i>
+            </button>
+        </div>
+
+        <audio id="audioElement" src="ElevenLabs_Inteligência_Emocional_Navegando_Nossas_Emoções_com_Consciência.mp3"></audio>
     </div>
 
     <script>
-      // Inicialização dos ícones
-      lucide.createIcons();
-
-      // Elementos DOM
-      const audio = document.getElementById("audioElement");
-      const playPauseBtn = document.getElementById("playPauseBtn");
-      const seekBar = document.getElementById("seekBar");
-
-      // Controle de reprodução
-      function togglePlay() {
-        audio.paused ? audio.play() : audio.pause();
-        playPauseBtn.innerHTML = audio.paused
-          ? '<i data-lucide="play"></i>'
-          : '<i data-lucide="pause"></i>';
         lucide.createIcons();
-      }
+        
+        const audio = document.getElementById('audioElement');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const seekBar = document.getElementById('seekBar');
 
-      // Atualização do tempo
-      function updateTime() {
-        seekBar.value = audio.currentTime;
-        document.getElementById("currentTime").textContent = formatTime(
-          audio.currentTime
-        );
-      }
+        // Controle simplificado
+        const togglePlay = () => {
+            audio.paused ? audio.play() : audio.pause();
+            playPauseBtn.innerHTML = audio.paused 
+                ? '<i data-lucide="play"></i>' 
+                : '<i data-lucide="pause"></i>';
+            lucide.createIcons();
+        };
 
-      // Formatação do tempo
-      function formatTime(seconds) {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = Math.floor(seconds % 60);
-        return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-      }
+        // Atualização de tempo otimizada
+        const formatTime = seconds => 
+            `${Math.floor(seconds/60)}:${Math.floor(seconds%60).toString().padStart(2,'0')}`;
 
-      // Event Listeners
-      playPauseBtn.addEventListener("click", togglePlay);
+        audio.addEventListener('timeupdate', () => {
+            seekBar.value = audio.currentTime;
+            document.getElementById('currentTime').textContent = formatTime(audio.currentTime);
+        });
 
-      audio.addEventListener("timeupdate", updateTime);
-      audio.addEventListener("loadedmetadata", () => {
-        seekBar.max = audio.duration;
-        document.getElementById("duration").textContent = formatTime(
-          audio.duration
-        );
-      });
+        audio.addEventListener('loadedmetadata', () => {
+            seekBar.max = audio.duration;
+            document.getElementById('duration').textContent = formatTime(audio.duration);
+        });
 
-      seekBar.addEventListener("input", () => {
-        audio.currentTime = seekBar.value;
-      });
-
-      audio.addEventListener("ended", () => {
-        playPauseBtn.innerHTML = '<i data-lucide="play"></i>';
-        lucide.createIcons();
-      });
-
-      // Adicione isso para controle externo
-      window.addEventListener("message", (e) => {
-        if (e.data === "play") audio.play();
-        if (e.data === "pause") audio.pause();
-      });
+        seekBar.addEventListener('input', () => audio.currentTime = seekBar.value);
+        playPauseBtn.addEventListener('click', togglePlay);
+        audio.addEventListener('ended', () => {
+            playPauseBtn.innerHTML = '<i data-lucide="play"></i>';
+            lucide.createIcons();
+        });
     </script>
-  </body>
+</body>
 </html>
